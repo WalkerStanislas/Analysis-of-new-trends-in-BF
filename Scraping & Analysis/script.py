@@ -13,7 +13,11 @@ class FasoNet(scrapy.Spider):
             'https://lefaso.net/spip.php?rubrique4', 
             'https://lefaso.net/spip.php?rubrique2', 
             'https://lefaso.net/spip.php?rubrique3', 
-            'https://lefaso.net/spip.php?rubrique62'
+            'https://lefaso.net/spip.php?rubrique62',
+            'https://lefaso.net/spip.php?rubrique62',
+            'https://lefaso.net/spip.php?rubrique18',
+            'https://lefaso.net/spip.php?rubrique5',
+            'https://lefaso.net/spip.php?rubrique7'
         ]
         # For each rubric, run through 10 pages
         for base_url in rubrics:
