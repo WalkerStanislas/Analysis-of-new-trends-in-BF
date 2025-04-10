@@ -1,2 +1,8 @@
 scrapy
 streamlit
+pandas
+plotly
+matplotlib
+wordcloud
+numpy
+altair
