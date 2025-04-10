@@ -11,7 +11,7 @@ from pathlib import Path
 
 # Configuration de la page
 st.set_page_config(
-    page_title="Analyse de Texte",
+    page_title="Analyse des Tendances d'Actualités",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -118,21 +118,21 @@ if page == "Tableau de bord":
         st.markdown('<div class="card">', unsafe_allow_html=True)
         total_docs = len(sentiments_df)
         st.markdown(f'<div class="metric-value">{total_docs:,}</div>', unsafe_allow_html=True)
-        st.markdown('<div class="metric-label">Documents analysés</div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-label">Textes analysés</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
         st.markdown('<div class="card">', unsafe_allow_html=True)
         total_topics = len(topics_df)
         st.markdown(f'<div class="metric-value">{total_topics}</div>', unsafe_allow_html=True)
-        st.markdown('<div class="metric-label">Topics identifiés</div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-label">Thèmes identifiés</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col3:
         st.markdown('<div class="card">', unsafe_allow_html=True)
         if 'sentiment_text' in sentiments_df.columns:
             sentiment_distribution = sentiments_df['sentiment_text'].value_counts()
-            positive_ratio = sentiment_distribution.get('positif', 0) / len(sentiments_df) * 100
+            positive_ratio = sentiment_distribution.get('positif', 1) / len(sentiments_df) * 100
             st.markdown(f'<div class="metric-value">{positive_ratio:.1f}%</div>', unsafe_allow_html=True)
             st.markdown('<div class="metric-label">Sentiments positifs</div>', unsafe_allow_html=True)
         else:
@@ -506,8 +506,8 @@ elif page == "À propos":
     """)
 
     st.markdown("### Contact")
-    st.markdown("Pour toute question ou suggestion concernant cette application, veuillez nous contacter à l'adresse suivante: contact@example.com")
+    st.markdown("Pour toute question ou suggestion concernant cette application, veuillez nous contacter à l'adresse suivante: walk.compaore@gmail.com")
 
 # Pied de page
 st.markdown("---")
-st.markdown("© 2025 - Analyse de Données Textuelles - Tous droits réservés")
+st.markdown("© 2025 - Analyse des Tendances d'Actualités - Tous droits réservés")
