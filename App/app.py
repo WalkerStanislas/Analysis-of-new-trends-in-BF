@@ -94,7 +94,7 @@ st.markdown('<div class="main-header">Analyse de Données Textuelles</div>', uns
 st.sidebar.title("Navigation")
 page = st.sidebar.radio(
     "Choisissez une page:",
-    ["Tableau de bord", "Analyse des sentiments", "Modélisation des topics", "Mots tendances", "À propos"]
+    ["Tableau de bord", "Analyse des sentiments", "Modélisation des thèmes", "Mots tendances", "À propos"]
 )
 
 try:
@@ -132,7 +132,7 @@ if page == "Tableau de bord":
         st.markdown('<div class="card">', unsafe_allow_html=True)
         if 'sentiment_text' in sentiments_df.columns:
             sentiment_distribution = sentiments_df['sentiment_text'].value_counts()
-            positive_ratio = sentiment_distribution.get('positif', 1) / len(sentiments_df) * 100
+            positive_ratio = sentiment_distribution.get(2) / len(sentiments_df) * 100
             st.markdown(f'<div class="metric-value">{positive_ratio:.1f}%</div>', unsafe_allow_html=True)
             st.markdown('<div class="metric-label">Sentiments positifs</div>', unsafe_allow_html=True)
         else:
@@ -144,7 +144,7 @@ if page == "Tableau de bord":
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown('<div class="sub-header">Distribution des Topics</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sub-header">Distribution des Thèmes</div>', unsafe_allow_html=True)
         topic_counts = topics_df['topic_id'].value_counts().reset_index()
         topic_counts.columns = ['Topic', 'Count']
         
@@ -154,7 +154,7 @@ if page == "Tableau de bord":
             y='Count',
             color='Count',
             color_continuous_scale='Blues',
-            title="Distribution des Topics",
+            title="Distribution des Thèmes",
             labels={'Topic': 'Topic ID', 'Count': 'Nombre de documents'}
         )
         fig.update_layout(height=400)
@@ -169,12 +169,12 @@ if page == "Tableau de bord":
         # Déterminer les catégories de sentiment
         if 'Sentiment' in sentiment_counts.columns:
             # Si les sentiments sont numériques, on les convertit en texte pour l'affichage
-            sentiment_map = {0: 'négatif', 1: 'neutre', 2: 'positif'}
+            sentiment_map = {-1: 'négatif', 0: 'neutre', 1: 'positif', 2: 'unknown'}
             if sentiment_counts['Sentiment'].dtype in [np.int64, np.float64]:
                 sentiment_counts['Sentiment'] = sentiment_counts['Sentiment'].map(sentiment_map)
             
             # Définir les couleurs pour les sentiments
-            colors = {'positif': '#4CAF50', 'neutre': '#FFC107', 'négatif': '#F44336'}
+            colors = {'positif': '#4CAF50', 'neutre': '#FFC107', 'négatif': '#F44336', 'unknown': '#FFD336'}
             
             fig = px.pie(
                 sentiment_counts, 
@@ -234,8 +234,8 @@ elif page == "Analyse des sentiments":
         sentiment_counts = sentiments_df[sentiment_col].value_counts().reset_index()
         sentiment_counts.columns = ['Sentiment', 'Count']
         
-        # Si les sentiments sont numériques, on les convertit en texte pour l'affichage
-        sentiment_map = {0: 'négatif', 1: 'neutre', 2: 'positif'}
+        
+        sentiment_map = {-1: 'négatif', 0: 'neutre', 1: 'positif', 'UNKNOWN': 'unknown'}
         if sentiment_counts['Sentiment'].dtype in [np.int64, np.float64]:
             sentiment_counts['Sentiment'] = sentiment_counts['Sentiment'].map(sentiment_map)
         
@@ -264,11 +264,11 @@ elif page == "Analyse des sentiments":
         st.plotly_chart(fig, use_container_width=True)
     
     # Si nous avons des données temporelles, montrer l'évolution des sentiments
-    if 'date' in sentiments_df.columns:
+    if 'date_normalized' in sentiments_df.columns:
         st.markdown("### Évolution des sentiments au fil du temps")
         
         # Préparer les données
-        sentiments_df['date'] = pd.to_datetime(sentiments_df['date'])
+        sentiments_df['date'] = pd.to_datetime(sentiments_df['date_normalized'])
         
         # Grouper par date et sentiment
         sentiments_over_time = sentiments_df.groupby([
@@ -327,11 +327,11 @@ elif page == "Analyse des sentiments":
         st.info("Les textes originaux ne sont pas disponibles dans les données.")
 
 # Page de modélisation des topics
-elif page == "Modélisation des topics":
+elif page == "Modélisation des thèmes":
     st.markdown('<div class="sub-header">Analyse détaillée des topics</div>', unsafe_allow_html=True)
     
     # Distribution des topics
-    st.markdown("### Distribution des documents par topic")
+    st.markdown("### Distribution des documents par thème")
     topic_counts = topics_df['topic_id'].value_counts().reset_index()
     topic_counts.columns = ['Topic', 'Count']
     
@@ -341,7 +341,7 @@ elif page == "Modélisation des topics":
         y='Count',
         color='Count',
         color_continuous_scale='Viridis',
-        title="Nombre de documents par topic"
+        title="Nombre de documents par thème"
     )
     st.plotly_chart(fig, use_container_width=True)
     
@@ -510,4 +510,4 @@ elif page == "À propos":
 
 # Pied de page
 st.markdown("---")
-st.markdown("© 2025 - Analyse des Tendances d'Actualités - Tous droits réservés")
+st.markdown("© Novembre 2024 - Analyse des Tendances d'Actualités - Tous droits réservés")
